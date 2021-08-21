@@ -1,44 +1,63 @@
-import { useRef, useEffect, useState } from "react";
-import { Terminal as Xterm } from "xterm";
+import { useEffect, useState } from "react";
 import socket from "../socket";
 import EVENTS from "../events";
-const Terminal = () => {
-    const terminalRef = useRef(null);
-    const [terminal] = useState(
-        new Xterm({
-            cursorBlink: true,
-            cols: 80,
-            rows: 300,
-            theme: {
-                // foreground: "black",
-                background: "#292D3E",
-                foreground: "#A6ACCD",
-                selection: "#717CB470",
-            },
-            fontFamily: "Source Code Pro",
-            fontSize: 12,
-            fontWeight: 500,
-        })
-    );
+import { Box, Heading } from "@chakra-ui/react";
+import { motion } from "framer-motion";
 
+/**
+ * @type {motion<import("@chakra-ui/react").ChakraComponent>}
+ */
+const MotionBox = motion(Box);
+
+const Terminal = ({ colors }) => {
+    const [output, setOutput] = useState("");
     useEffect(() => {
-        terminal.open(terminalRef.current);
-
-        terminal.onData((data) => {
-            socket.emit(EVENTS.INPUT, data);
-        });
         socket.on(EVENTS.OUTPUT, (data) => {
-            terminal.write(data);
-            terminal.focus();
+            setOutput(data);
         });
-    }, [terminal]);
+    }, [colors]);
 
-    // useEffect(() => {
-    //     terminal.clear();
-    //     terminal.writeln(output);
-    // }, [output, terminal]);
-
-    return <div className="terminal" ref={terminalRef}></div>;
+    return (
+        // showOutput && (
+        <MotionBox
+            color={colors.foreground}
+            bg={colors.background}
+            width="100%"
+            // position="absolute"
+            bottom="0"
+            drag="y"
+            height="350px"
+            overflow="hidden"
+            dragConstraints={{
+                top: -200,
+                bottom: 0,
+            }}
+            dragMomentum={false}
+            marginTop="-1"
+            dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
+            dragElastic={0}
+        >
+            <MotionBox
+                textAlign="center"
+                px="2"
+                py="1"
+                bg={colors.lineHighlightBackground}
+                whileHover={{
+                    cursor: "n-resize",
+                }}
+            >
+                <Heading as="h5" fontSize="sm" fontWeight="medium">
+                    Output
+                </Heading>
+            </MotionBox>
+            <Box px="4">
+                {/* <Textarea readOnly> */}
+                {">"} {output}
+                {/* </Textarea> */}
+            </Box>
+        </MotionBox>
+        // )
+    );
 };
 
 export default Terminal;

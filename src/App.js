@@ -1,78 +1,99 @@
-import "./App.css";
 import "xterm/css/xterm.css";
 import Editor from "@monaco-editor/react";
-import { Terminal } from "./components";
-import { useCallback, useState } from "react";
+import { Buttons, Terminal } from "./components";
+import { useRef, useState } from "react";
 import socket from "./socket";
 import EVENTS from "./events";
-
-const LANGUAGES = {
-    javascript: {
-        ext: ".js",
-    },
-    python: {
-        ext: ".py",
-    },
-    typescript: {
-        ext: ".ts",
-    },
-};
+import { DEFAULT_THEME, LANGUAGES } from "./constants";
+import { Box, Spinner, Container } from "@chakra-ui/react";
+import { useEditorTheme } from "./hooks";
 
 function App() {
-    const [content, setContent] = useState("///Start coding");
-    const [language, setLanguage] = useState(Object.keys(LANGUAGES)[0]);
-    const [theme, setTheme] = useState("vs-dark");
-    const [isEditorReady, setIsEditorReady] = useState(false);
+    const [content, setContent] = useState("");
+    const [language, setLanguage] = useState("javascript");
+    const [theme, setTheme] = useState(DEFAULT_THEME);
+    const [colors, setColors] = useState();
+    const [fontSize, setFontSize] = useState(18);
+    const [themesAvaliable, colorsAvaliable] = useEditorTheme();
+    const editorRef = useRef(null);
 
-    const handleEditorDidMount = () => {
-        setIsEditorReady(true);
+    const handleFontSize = (e) => {
+        const { value } = e.target;
+        console.log(editorRef.current.editor);
+        // editorRef.current.editor.fontSize(value);
+        setFontSize(value);
     };
 
-    const toggleTheme = () => {
-        setTheme(theme === "vs-dark" ? "light" : "vs-dark");
+    const handleEditorDidMount = (_editor, monaco) => {
+        for (let theme in themesAvaliable) {
+            monaco.editor.defineTheme(theme, themesAvaliable[theme]);
+        }
+        monaco.editor.setTheme(DEFAULT_THEME);
+        setColors(colorsAvaliable[DEFAULT_THEME]);
+        editorRef.current = monaco;
     };
 
-    const runCode = useCallback(() => {
+    const updateTheme = (e) => {
+        const value = e.target.value;
+        setTheme(value);
+        setColors(colorsAvaliable[value]);
+    };
+
+    const runCode = () => {
+        console.log("running");
         socket.emit(EVENTS.RUN, {
             content,
             language,
             ext: LANGUAGES[language].ext,
         });
-    }, [content, language]);
+    };
+
+    if (!colorsAvaliable || !themesAvaliable) {
+        return (
+            <Container
+                width="100vw"
+                height="100vh"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+            >
+                <Spinner size="lg" />
+            </Container>
+        );
+    }
 
     return (
-        <div className="container">
-            <Terminal />
-            <div>
-                <div className="flex">
-                    <button onClick={toggleTheme} disabled={isEditorReady}>
-                        {theme}
-                    </button>
-                    <button onClick={runCode} disabled={isEditorReady}>
-                        Run
-                    </button>
-                    <select
-                        onChange={(e) => {
-                            setLanguage(e.target.value);
-                        }}
-                    >
-                        {Object.keys(LANGUAGES).map((lang, i) => (
-                            <option value={lang} key={i}>
-                                {lang}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+        <Box width="100%" overflow="hidden" height="100vh">
+            <Box>
+                {colors && (
+                    <Buttons
+                        runCode={runCode}
+                        setLanguage={setLanguage}
+                        updateTheme={updateTheme}
+                        theme={theme}
+                        language={language}
+                        themes={Object.keys(themesAvaliable)}
+                        colors={colors}
+                        fontSize={fontSize}
+                        handleFontSize={handleFontSize}
+                    />
+                )}
                 <Editor
                     value={content}
                     onChange={(value) => setContent(value)}
                     language={language}
+                    options={{
+                        fontSize,
+                        theme,
+                    }}
                     theme={theme}
-                    height="100%"
-                    editorDidMount={handleEditorDidMount}
+                    height="80vh"
+                    loading={<Spinner size="lg" />}
+                    onMount={handleEditorDidMount}
                 />
-            </div>
-        </div>
+            </Box>
+            <Box>{colors && <Terminal colors={colors} />}</Box>
+        </Box>
     );
 }
 
