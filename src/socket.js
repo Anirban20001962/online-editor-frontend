@@ -1,9 +1,9 @@
-import io from "socket.io-client";
+import io from 'socket.io-client';
 
-const socket = io("http://localhost:5000/");
+const socket = io('http://localhost:3000/');
 
-socket.on("connect", () => {
-    console.log("socket connection made");
+socket.on('connect', () => {
+	console.log('socket connection made');
 });
 
 export default socket;

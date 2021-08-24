@@ -1,1 +1,1 @@
-export { default as useEditorTheme } from "./useEditorTheme";
+export { default as useEditorTheme } from './useEditorTheme';
