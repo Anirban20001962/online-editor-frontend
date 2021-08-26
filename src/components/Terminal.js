@@ -13,6 +13,7 @@ const Terminal = ({ colors }) => {
     const [output, setOutput] = useState('');
     useEffect(() => {
         socket.on(EVENTS.OUTPUT, (data) => {
+            console.log(data);
             setOutput(data);
         });
     }, [colors]);
