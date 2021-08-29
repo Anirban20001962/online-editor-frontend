@@ -19,8 +19,8 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
-        source: "build"
-        target: "onlineEditor/client"
+        source: "build/*"
+        target: "onlineEditor/client/build"
         timeout: 10m
         command_timeout: 20m
 
