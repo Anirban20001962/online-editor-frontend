@@ -20,7 +20,7 @@ import {
     ModalCloseButton,
 } from '@chakra-ui/react';
 import { LANGUAGES } from '../constants';
-import { IoPlay, IoSettings, IoTerminal } from 'react-icons/io5';
+import { IoPlay, IoSettings } from 'react-icons/io5';
 
 const Options = ({ isOpen, onClose, color, bg, ...props }) => {
     return (
