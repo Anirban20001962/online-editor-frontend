@@ -19,11 +19,10 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
-        source: "./build/*"
+        source: "build"
         target: "onlineEditor/client"
         timeout: 10m
         command_timeout: 20m
-        rm: true
 
     - name: Executing remote command
       uses: appleboy/ssh-action@master
