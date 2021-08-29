@@ -17,13 +17,6 @@ function App() {
     const [themesAvaliable, colorsAvaliable] = useEditorTheme();
     const editorRef = useRef(null);
 
-    const handleFontSize = (e) => {
-        const { value } = e.target;
-        console.log(editorRef.current.editor);
-        // editorRef.current.editor.fontSize(value);
-        setFontSize(value);
-    };
-
     const handleEditorDidMount = (_editor, monaco) => {
         for (let theme in themesAvaliable) {
             monaco.editor.defineTheme(theme, themesAvaliable[theme]);
@@ -76,7 +69,7 @@ function App() {
                         themes={Object.keys(themesAvaliable)}
                         colors={colors}
                         fontSize={fontSize}
-                        handleFontSize={handleFontSize}
+                        setFontSize={setFontSize}
                     />
                 )}
                 <Editor

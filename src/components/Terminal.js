@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import socket from '../socket';
 import EVENTS from '../events';
-import { Box, Heading } from '@chakra-ui/react';
+import { Box, Heading, Icon } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
+import { IoTerminal } from 'react-icons/io5';
 
 /**
  * @type {motion<import("@chakra-ui/react").ChakraComponent>}
@@ -48,6 +49,7 @@ const Terminal = ({ colors }) => {
                 }}
             >
                 <Heading as="h4" fontSize="lg" fontWeight="medium">
+                    <Icon as={IoTerminal} mr="2" />
                     Output
                 </Heading>
             </MotionBox>
