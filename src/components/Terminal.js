@@ -13,12 +13,17 @@ const MotionBox = motion(Box);
 const Terminal = ({ colors }) => {
     const [output, setOutput] = useState([]);
     useEffect(() => {
+        socket.on(EVENTS.RUNNING, (data) => setOutput(data));
+
         socket.on(EVENTS.OUTPUT, (data) => {
             let outSocket = data.split('\n');
-            outSocket.pop();
-            outSocket = outSocket.map((el, index) => (
-                <p key={index}>{'> ' + el}</p>
-            ));
+            // outSocket.pop();
+            outSocket = outSocket.map((el, index) => {
+                if (el === '') {
+                    return undefined;
+                }
+                return <p key={index}>{'> ' + el}</p>;
+            });
             setOutput(outSocket);
         });
     }, [colors]);

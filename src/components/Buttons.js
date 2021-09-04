@@ -3,6 +3,7 @@ import {
     Select,
     Stack,
     StackItem,
+    Input,
     NumberInput,
     NumberInputField,
     NumberDecrementStepper,
@@ -155,6 +156,13 @@ export default function Buttons({
                     </StackItem>
                 </Stack>
             </Options>
+            <StackItem>
+                <Input
+                    readOnly
+                    value={`Language: ${language}`}
+                    w="fit-content"
+                />
+            </StackItem>
             <StackItem>
                 <IconButton
                     icon={<Icon as={IoSettings} />}
