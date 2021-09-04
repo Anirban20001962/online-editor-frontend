@@ -14,6 +14,14 @@ export const LANGUAGES = {
         ext: '.ts',
         initialContent: `/*${comment}*/`,
     },
+    c: {
+        ext: '.c',
+        initialContent: `/*${comment}*/`,
+    },
+    cpp: {
+        ext: '.cpp',
+        initialContent: `/*${comment}*/`,
+    },
 };
 
-export const DEFAULT_THEME = 'active4d';
+export const DEFAULT_THEME = 'amy';

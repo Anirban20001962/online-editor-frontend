@@ -18,6 +18,8 @@ import {
     FormLabel,
     useDisclosure,
     ModalCloseButton,
+    Flex,
+    Heading,
 } from '@chakra-ui/react';
 import { LANGUAGES } from '../constants';
 import { IoPlay, IoSettings } from 'react-icons/io5';
@@ -81,6 +83,11 @@ export default function Buttons({
             py="1"
             className="base-name"
         >
+            <Flex alignItems="center" justifyContent="center" mr="auto">
+                <Heading as="h3" size="lg">
+                    Snippet Ground
+                </Heading>
+            </Flex>
             <Options
                 isOpen={isOpen}
                 onClose={onClose}
