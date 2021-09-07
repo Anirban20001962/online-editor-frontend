@@ -4,9 +4,10 @@ import { Buttons, Terminal } from './components';
 import { useEffect, useRef, useState } from 'react';
 import socket from './socket';
 import EVENTS from './events';
-import { DEFAULT_THEME, LANGUAGES } from './constants';
-import { Box, Spinner, Container } from '@chakra-ui/react';
+import { DEFAULT_THEME, EXTENSIONS, LANGUAGES } from './constants';
+import { Box, Spinner, Container, useMediaQuery } from '@chakra-ui/react';
 import { useEditorTheme } from './hooks';
+import { fileOpen, fileSave } from 'browser-fs-access';
 
 function App() {
     const [language, setLanguage] = useState('javascript');
@@ -17,10 +18,56 @@ function App() {
     const [themesAvaliable, colorsAvaliable] = useEditorTheme();
     const editorRef = useRef(null);
 
+    const [isLarger600] = useMediaQuery('(min-width: 600px)');
+
     useEffect(() => {
         const editor = document.querySelector('.editor');
         if (editor) editor.focus();
     }, [colors]);
+
+    useEffect(() => {
+        if (!content) {
+            setContent(LANGUAGES[language].initialContent);
+        }
+    }, [content, language]);
+
+    useEffect(() => {
+        if (!isLarger600) {
+            setFontSize(12);
+        }
+    }, [isLarger600]);
+
+    const openFile = async () => {
+        const extensions = EXTENSIONS;
+        console.log(extensions);
+        const blob = await fileOpen({
+            extensions,
+            excludeAcceptAllOption: true,
+        });
+        const text = await blob.text();
+        const ext = blob.name.split('.')[1];
+        const lang = Object.keys(LANGUAGES).filter(
+            (l) => LANGUAGES[l].ext === '.' + ext
+        )[0];
+
+        setLanguage(lang);
+        setContent(text);
+    };
+
+    const saveFile = async () => {
+        // const extensions = Object.values(LANGUAGES).map((v) => v.ext);
+        let { ext } = LANGUAGES[language];
+
+        const blob = new Blob([content], {
+            type: [`text/${ext}`],
+        });
+
+        await fileSave(blob, {
+            fileName: `code${ext}`,
+            extensions: [ext],
+            startIn: 'downloads',
+        });
+    };
 
     const handleEditorDidMount = (_editor, monaco) => {
         for (let theme in themesAvaliable) {
@@ -74,6 +121,8 @@ function App() {
                         colors={colors}
                         fontSize={fontSize}
                         setFontSize={setFontSize}
+                        saveFile={saveFile}
+                        openFile={openFile}
                     />
                 )}
                 <Editor

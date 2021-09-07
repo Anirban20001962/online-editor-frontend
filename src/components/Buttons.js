@@ -1,5 +1,4 @@
 import {
-    IconButton,
     Select,
     Stack,
     StackItem,
@@ -9,7 +8,6 @@ import {
     NumberDecrementStepper,
     NumberIncrementStepper,
     NumberInputStepper,
-    Icon,
     Modal,
     ModalOverlay,
     ModalContent,
@@ -23,7 +21,13 @@ import {
     Heading,
 } from '@chakra-ui/react';
 import { LANGUAGES } from '../constants';
-import { IoPlay, IoSettings } from 'react-icons/io5';
+import {
+    AiFillFolderOpen,
+    AiFillPlaySquare,
+    AiFillSave,
+    AiFillSetting,
+} from 'react-icons/ai';
+import { Button } from '.';
 
 const Options = ({ isOpen, onClose, color, bg, ...props }) => {
     return (
@@ -70,23 +74,31 @@ export default function Buttons({
     themes,
     fontSize,
     setFontSize,
+    saveFile,
+    openFile,
 }) {
     const handleFontSize = (value) => setFontSize(value);
     const { onOpen, isOpen, onClose } = useDisclosure();
+
     return (
         <Stack
             spacing="2"
             direction="row"
-            justifyContent="flex-end"
+            justifyContent={['center', 'flex-end']}
             color={colors.foreground}
             bg={colors.background}
             px="2"
             py="1"
             className="base-name"
         >
-            <Flex alignItems="center" justifyContent="center" mr="auto">
-                <Heading as="h3" size="lg">
-                    Snippet Ground
+            <Flex
+                alignItems="center"
+                justifyContent="center"
+                mr="auto"
+                display={['none', 'flex']}
+            >
+                <Heading as="h3" size="md">
+                    Snippetor
                 </Heading>
             </Flex>
             <Options
@@ -158,30 +170,40 @@ export default function Buttons({
             </Options>
             <StackItem>
                 <Input
+                    size={'md'}
+                    display={['none', 'flex']}
                     readOnly
                     value={`Language: ${language}`}
                     w="fit-content"
                 />
             </StackItem>
             <StackItem>
-                <IconButton
-                    icon={<Icon as={IoSettings} />}
-                    bg="inherit"
-                    color="inherit"
-                    onClick={onOpen}
-                    size="md"
+                <Button
+                    iconName={AiFillFolderOpen}
+                    onClick={openFile}
+                    label="Open File"
                 />
             </StackItem>
             <StackItem>
-                <IconButton
-                    icon={<Icon as={IoPlay} />}
+                <Button
+                    iconName={AiFillSave}
+                    onClick={saveFile}
+                    label="Save File"
+                />
+            </StackItem>
+            <StackItem>
+                <Button
+                    iconName={AiFillSetting}
+                    onClick={onOpen}
+                    label="Settings"
+                />
+            </StackItem>
+            <StackItem>
+                <Button
+                    iconName={AiFillPlaySquare}
                     onClick={runCode}
-                    bg="inherit"
-                    color="inherit"
-                    size="md"
-                >
-                    Run
-                </IconButton>
+                    label="Run"
+                />
             </StackItem>
         </Stack>
     );

@@ -57,7 +57,7 @@ const Terminal = ({ colors }) => {
                     cursor: 'n-resize',
                 }}
             >
-                <Heading as="h4" fontSize="lg" fontWeight="medium">
+                <Heading as="h4" size="sm" fontWeight="medium">
                     <Icon as={IoTerminal} mr="2" />
                     Output
                 </Heading>

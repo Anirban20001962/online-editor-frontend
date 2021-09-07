@@ -12,6 +12,7 @@
         "@testing-library/react": "^11.1.0",
         "@testing-library/user-event": "^12.1.10",
         "axios": "^0.21.1",
+        "browser-fs-access": "^0.20.4",
         "framer-motion": "^4",
         "monaco-themes": "^0.3.3",
         "react": "^17.0.2",
