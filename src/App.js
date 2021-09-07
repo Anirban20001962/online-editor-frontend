@@ -8,6 +8,7 @@ import { DEFAULT_THEME, EXTENSIONS, LANGUAGES } from './constants';
 import { Box, Spinner, Container, useMediaQuery } from '@chakra-ui/react';
 import { useEditorTheme } from './hooks';
 import { fileOpen, fileSave } from 'browser-fs-access';
+import Head from './components/Head';
 
 function App() {
     const [language, setLanguage] = useState('javascript');
@@ -24,12 +25,6 @@ function App() {
         const editor = document.querySelector('.editor');
         if (editor) editor.focus();
     }, [colors]);
-
-    useEffect(() => {
-        if (!content) {
-            setContent(LANGUAGES[language].initialContent);
-        }
-    }, [content, language]);
 
     useEffect(() => {
         if (!isLarger600) {
@@ -108,6 +103,7 @@ function App() {
 
     return (
         <Box width="100%" overflow="hidden" height="100vh">
+            <Head description="Online Editor for Ts, Js, C , Cpp and Python" />
             <Box>
                 {colors && (
                     <Buttons

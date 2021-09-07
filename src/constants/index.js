@@ -1,5 +1,5 @@
 const comment =
-    'This is a code playground\nWe run three languages typescript javascript and python';
+    'This is a code playground\nWe run three languages typescript, javascript, c++, c and python';
 
 export const LANGUAGES = {
     javascript: {
