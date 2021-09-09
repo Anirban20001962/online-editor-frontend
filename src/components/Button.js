@@ -11,7 +11,7 @@ const Button = ({ iconName, onClick, label }) => {
                     bg: 'inherit',
                     color: 'inherit',
                     borderRadius: 'inherit',
-                    bottom: '-25px',
+                    bottom: '-15px',
                     position: 'absolute',
                     display: 'none',
                 },

@@ -20,6 +20,10 @@ const theme = extendTheme({
         Button: {
             defaultProps: {
                 size: 'lg',
+                variant: 'base',
+            },
+            variants: {
+                base: {},
             },
         },
     },
